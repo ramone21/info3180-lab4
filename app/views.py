@@ -54,6 +54,18 @@ def login():
             flash('You were logged in')
             return redirect(url_for('add_file'))
     return render_template('login.html', error=error)
+    
+@app.route('/filelisting')
+def listfiles():
+    loads =[]
+    if not session.get('logged_in'):
+        abort(401)
+    rootdir = os.getcwd() 
+    print rootdir
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'): 
+        for file in files: 
+           loads +=[file]#[os.path.join(subdir, file)]
+    return render_template('filelisting.html',uploads=loads)
 
 @app.route('/logout')
 def logout():
